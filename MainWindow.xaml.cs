@@ -47,7 +47,7 @@ namespace WPFZooManager
             ShowAssociatedAnimals();
         }
 
-        private void ShowAssociatedAnimals() 
+        private void ShowAssociatedAnimals()
         {
             try
             {
@@ -57,7 +57,9 @@ namespace WPFZooManager
                     return;
                 }
 
-                string query = @"SELECT a.Name FROM Animal a INNER JOIN ZooAnimal za ON a.Id = za.AnimalId WHERE za.ZooId = @ZooId";
+                string query = @"SELECT a.Id, a.Name FROM Animal a 
+                         INNER JOIN ZooAnimal za ON a.Id = za.AnimalId 
+                         WHERE za.ZooId = @ZooId";
 
                 SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
                 sqlCommand.Parameters.AddWithValue("@ZooId", listZoos.SelectedValue);
@@ -65,17 +67,17 @@ namespace WPFZooManager
 
                 using (sqlDataAdapter)
                 {
-                    DataTable zooTable = new DataTable();
-                    sqlDataAdapter.Fill(zooTable);
+                    DataTable animalTable = new DataTable();
+                    sqlDataAdapter.Fill(animalTable);
 
                     listAssociatedAnimals.DisplayMemberPath = "Name";
                     listAssociatedAnimals.SelectedValuePath = "Id";
-                    listAssociatedAnimals.ItemsSource = zooTable.DefaultView;
+                    listAssociatedAnimals.ItemsSource = animalTable.DefaultView;
                 }
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.ToString());
+
             }
         }
 
